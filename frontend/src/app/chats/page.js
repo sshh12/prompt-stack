@@ -9,6 +9,7 @@ import { api } from '@/lib/api';
 import { Chat } from './components/Chat';
 import { RightPanel } from './components/RightPanel';
 import { useToast } from '@/hooks/use-toast';
+import Splitter from '@/components/ui/splitter';
 
 export default function WorkspacePage({ chatId }) {
   const { addChat, team, projects, refreshProjects } = useUser();
@@ -294,31 +295,33 @@ export default function WorkspacePage({ chatId }) {
             </Button>
           </div>
         )}
-        <Chat
-          connected={!!webSocketRef.current}
-          messages={messages}
-          onSendMessage={handleSendMessage}
-          projectTitle={chatTitle}
-          status={status}
-          onProjectSelect={handleProjectSelect}
-          onStackSelect={handleStackPackSelect}
-          showStackPacks={chatId === 'new'}
-          suggestedFollowUps={suggestedFollowUps}
-          onReconnect={handleReconnect}
-        />
-        <RightPanel
-          onSendMessage={handleSendMessage}
-          isOpen={isPreviewOpen}
-          onClose={() => setIsPreviewOpen(false)}
-          projectPreviewUrl={projectPreviewUrl}
-          projectPreviewPath={projectPreviewPath}
-          setProjectPreviewPath={setProjectPreviewPath}
-          projectPreviewHash={previewHash}
-          projectFileTree={projectFileTree}
-          project={projects.find((p) => +p.id === +projectId)}
-          chatId={chatId}
-          status={status}
-        />
+        <Splitter defaultLeftWidth="60%" minLeftWidth={400} minRightWidth={400} className="h-full">
+          <Chat
+            connected={!!webSocketRef.current}
+            messages={messages}
+            onSendMessage={handleSendMessage}
+            projectTitle={chatTitle}
+            status={status}
+            onProjectSelect={handleProjectSelect}
+            onStackSelect={handleStackPackSelect}
+            showStackPacks={chatId === 'new'}
+            suggestedFollowUps={suggestedFollowUps}
+            onReconnect={handleReconnect}
+          />
+          <RightPanel
+            onSendMessage={handleSendMessage}
+            isOpen={isPreviewOpen}
+            onClose={() => setIsPreviewOpen(false)}
+            projectPreviewUrl={projectPreviewUrl}
+            projectPreviewPath={projectPreviewPath}
+            setProjectPreviewPath={setProjectPreviewPath}
+            projectPreviewHash={previewHash}
+            projectFileTree={projectFileTree}
+            project={projects.find((p) => +p.id === +projectId)}
+            chatId={chatId}
+            status={status}
+          />
+        </Splitter>
       </div>
     </div>
   );
