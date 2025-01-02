@@ -1,0 +1,36 @@
+FROM python:3.11
+
+WORKDIR /
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    wget \
+    zip \
+    unzip && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y --no-install-recommends nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN node --version && npm --version
+
+# Create new Angular project in one command, similar to create-next-app
+RUN npm install -g @angular/cli && \
+    ng new frontend \
+    --routing=true \
+    --style=scss \
+    --skip-git \
+    --skip-tests \
+    --defaults \
+    --skip-install && \
+    cd frontend && \
+    npm install && \
+    ng build
+
+RUN ls -asl /frontend && \
+    ls -asl /frontend/src && \
+    ls -asl /frontend/src/app && \
+    cat /frontend/package.json
+
+EXPOSE 3000
